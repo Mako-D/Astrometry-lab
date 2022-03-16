@@ -11,9 +11,9 @@ using namespace std;
 * учитывается введённый тип
 */
 
-#define AngleSecond (1. / (60 * 60)); //Секунда угловой дуги
-#define AngleMinute (1. / 60); //Минута угловой дуги
-#define AngleMAS (1./(60 * 60 * 100)) //Милисекунда угловой дуги
+#define AngleSecond double(1. / (60 * 60)); //Секунда угловой дуги
+#define AngleMinute double(1. / 60); //Минута угловой дуги
+#define AngleMAS double(1./(60 * 60 * 100)) //Милисекунда угловой дуги
 #define AngleAccuracy AngleSecond // Точность угла
 
 enum AngleType {
@@ -110,10 +110,10 @@ public:
 	}
 };
 
-int main() {
-	Angle a(350.255);
-	Angle b(30.123);
-	bool c = a == b;
-	
-	return 0;
-}
+//int main() {
+//	Angle a(350.255);
+//	Angle b(30.123);
+//	bool c = a == b;
+//	
+//	return 0;
+//}
