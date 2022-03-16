@@ -141,6 +141,7 @@
   <ItemGroup>
     <ClCompile Include="First_Trash.cpp" />
     <ClCompile Include="Second_Trash.cpp" />
+    <ClCompile Include="Third_Trash.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
