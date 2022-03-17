@@ -1,5 +1,8 @@
 #include <utility>
 #include <string>
+#include <vector>
+#include <chrono>
+#include <iostream>
 
 enum Tycho2Label {
 	TYC1,
@@ -168,7 +171,16 @@ char GetValueTycho2_c(const std::string& str, Tycho2Label label) {
 
 int main() {
 	using namespace std;
+	vector<double> v;
 	string input = "0001 00055 1| |  2.46593506|  2.04847203|   10.5|  -19.6| 71| 79| 1.9| 2.0|1969.12|1961.22| 3|1.3|0.6|1.3|0.6|12.405|0.217|11.638|0.149|999| |         |  2.46591139|  2.04851833|1.69|1.52| 83.2| 99.6| |-0.1\n";
-	double a = GetValueTycho2_d(input, Tycho2Label::corr);
-
+	auto start = chrono::high_resolution_clock::now();
+	for (int i = 0; i < 10'500'000; i++) {
+		v.push_back(GetValueTycho2_d(input, Tycho2Label::mDEdeg));
+		v.push_back(GetValueTycho2_d(input, Tycho2Label::DEdeg));
+		v.push_back(GetValueTycho2_d(input, Tycho2Label::BT));
+	}
+	auto end = chrono::high_resolution_clock::now();
+	chrono::duration<float> duration = end - start;
+	cout << "Duration " << duration.count() << "s" << endl;
+	system("PAUSE");
 }
