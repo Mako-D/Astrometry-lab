@@ -18,13 +18,13 @@ using DE = double;
 using RA = double;
 using ProperMotion = pair<RA, DE>; // degree per year
 
-class StarCatalog {
+class Star {
 protected:
 	Coordinates coord;
 	ProperMotion pmotion;
 	Magnitude mag;
 public:
-	friend bool operator == (const StarCatalog& lhs, const StarCatalog& rhs) {
+	friend bool operator == (const Star& lhs, const Star& rhs) {
 		return (
 			lhs.coord == rhs.coord &&
 			abs(lhs.mag - rhs.mag) < MagnitudeAccuracy
@@ -39,7 +39,7 @@ public:
 
 };
 
-class UCAC2STAR : public StarCatalog {
+class UCAC2STAR : public Star {
 public:
 	UCAC2STAR
 	(Coordinates coord,
@@ -77,7 +77,7 @@ private:
 	}
 };
 
-class TYCHO2STAR : public StarCatalog {
+class TYCHO2STAR : public Star {
 public:
 	TYCHO2STAR
 	   (Coordinates coord,
