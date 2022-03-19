@@ -115,7 +115,12 @@ public:
 	double Get_delta() const {
 		return delta.GetDeg();
 	}
-
+	friend istream& operator << (istream& is, Coordinates& c) {
+		double a, d;
+		is >> a >> d;
+		c = { a, d };
+		return is;
+	}
 
 };
 

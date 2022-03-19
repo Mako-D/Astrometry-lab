@@ -6,11 +6,12 @@
 #include <fstream>
 #include <sstream>
 #include <exception>
+#include <omp.h>
 extern "C" {
 #include "ucac2.h"
 }
 
-#define AreaAccuraccyDeg 1. / (60. * 60.)
+#define AreaAccuraccyDeg 2. * 1. / (60. * 60.)
 
 using Magnitude = double;
 using DE = double;
@@ -57,8 +58,23 @@ public:
 	}
 	//void ConvertCharBufferToStars(const )
 private:
-	int offset;
+	int UCAC2ID;
 	UCAC2_STAR s;
+
+	friend istream& operator >> (istream& is, UCAC2STAR& in) {
+		string temp;
+		string needed1, needed2;
+		is >> temp >> needed1 >> needed2;
+		in.coord = { atof(needed1.c_str()), atof(needed2.c_str()) };
+		is >> needed1;
+		in.mag = atof(needed1.c_str());
+		is >> temp >> temp >> temp >> temp >> temp >> temp >> temp >> temp;
+		is >> needed1 >> needed2;
+		in.pmotion = make_pair(atof(needed1.c_str()), atof(needed2.c_str()));
+		is.ignore(200, '\n');
+
+		return is;
+	}
 };
 
 class TYCHO2STAR : public StarCatalog {
@@ -101,28 +117,41 @@ int main() {
 		ifstream t2c_stream("catalog.dat");
 		if (t2c_stream.fail()) exit(1);
 		TYCHO2STAR temp;
-		while (!t2c_stream.eof() && t2c.size() < 1'000) {
+		while (!t2c_stream.eof()/* && t2c.size() < 150'000*/) {
 			t2c_stream >> temp;
 			t2c.push_back(temp);
 		}
 		t2c_stream.close();
 	}
 
-	for (const auto& t2s : t2c) {
-		UCAC2Catalog u2c;
-		{
-			char buffer[1000] = { '\0' };
-			char path[24] = "UCAC2Catalog\\u2\\extract";
-			int a = extract_ucac2_stars(buffer, t2s.Get_RA(), t2s.Get_DE(), 
-				AreaAccuraccyDeg, AreaAccuraccyDeg, path, 0);
-			stringstream ss;
-			string starlineUCAC2;
-			ss << buffer;
-			while (getline(ss, starlineUCAC2)) {
-				cout << "HI";
+	vector<pair<TYCHO2STAR, UCAC2STAR>> IdentityCatalog;
+	auto start_time = std::chrono::steady_clock::now();
+	{
+		for (const auto& t2s : t2c) {
+			UCAC2Catalog u2c;
+			{
+				char buffer[1000] = { '\0' };
+				char path[24] = "UCAC2Catalog\\u2\\extract";
+				int a = extract_ucac2_stars(buffer, t2s.Get_RA(), t2s.Get_DE(),
+					AreaAccuraccyDeg, AreaAccuraccyDeg, path, 0);
+				stringstream ss;
+				string starlineUCAC2;
+				ss << buffer;
+				while (getline(ss, starlineUCAC2)) {
+					stringstream ss_additional;
+					UCAC2STAR u2s;
+					ss_additional << starlineUCAC2;
+					ss_additional >> u2s;
+					if (t2s == u2s) {
+						IdentityCatalog.push_back({ t2s, u2s });
+					}
+				}
 			}
 		}
 	}
+	auto end_time = std::chrono::steady_clock::now();
+	auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+	std::cout << elapsed_ns.count() << " ms\n";
 
 
 	return 0;

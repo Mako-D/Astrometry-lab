@@ -133,6 +133,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp17</LanguageStandard>
+      <OpenMPSupport>true</OpenMPSupport>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -143,10 +144,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Fifth_Trash.cpp" />
-    <ClCompile Include="First_Trash.cpp" />
-    <ClCompile Include="Fourth_Trash.cpp" />
-    <ClCompile Include="Second_Trash.cpp" />
-    <ClCompile Include="Third_Trash.cpp" />
     <ClCompile Include="ucac2.c" />
   </ItemGroup>
   <ItemGroup>

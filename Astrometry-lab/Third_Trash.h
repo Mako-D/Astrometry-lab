@@ -45,6 +45,7 @@ enum class Tycho2Label {
 };
 
 enum class UCAC2Label {
+	USAS2ID,
 	RA,
 	DE,
 	U2Rmag,
@@ -70,36 +71,46 @@ enum class UCAC2Label {
 	m2_cc
 };
 
-std::string GetValueUCAC2_s(const std::string& str, UCAC2Label label) {
-	using namespace std;
-	pair<int, int> bit_for_mask;
-	//'d' - double
-	//'c' - char
-	//'s' - string
-	switch (label) {
-	case UCAC2Label::RA:
-		bit_for_mask = make_pair(1, 4);
-		break;
-	case UCAC2Label::DE:
-		bit_for_mask = make_pair(5, 8);
-		break;
-	case UCAC2Label::U2Rmag:
-		bit_for_mask = make_pair(9, 10);
-		break;
-	case UCAC2Label::pmRA:
-		bit_for_mask = make_pair(21, 24);
-		break;
-	case UCAC2Label::pmDE:
-		bit_for_mask = make_pair(25, 28);
-		break;
-	}
-	auto [begin_mask, end_mask] = bit_for_mask;
-	return str.substr(begin_mask - 1, end_mask - begin_mask);
-}
+//std::string GetValueUCAC2_s(const std::string& str, UCAC2Label label) {
+//	using namespace std;
+//	pair<int, int> bit_for_mask;
+//	//'d' - double
+//	//'c' - char
+//	//'s' - string
+//	switch (label) {
+//	case UCAC2Label::USAS2ID:
+//		bit_for_mask = make_pair(1, 8);
+//		break;
+//	case UCAC2Label::RA:
+//		bit_for_mask = make_pair(10, 19);
+//		break;
+//	case UCAC2Label::DE:
+//		bit_for_mask = make_pair(21, 30);
+//		break;
+//	case UCAC2Label::U2Rmag:
+//		bit_for_mask = make_pair(32, 36);
+//		break;
+//	case UCAC2Label::EpRAm:
+//		bit_for_mask = make_pair(32, 36);
+//		break;
+//	case UCAC2Label::EpDEm:
+//		bit_for_mask = make_pair(32, 36);
+//		break;
+//	case UCAC2Label::pmRA:
+//		bit_for_mask = make_pair(32, 36);
+//		break;
+//	case UCAC2Label::pmDE:
+//		bit_for_mask = make_pair(32, 36);
+//		break;
+//
+//	}
+//	auto [begin_mask, end_mask] = bit_for_mask;
+//	return str.substr(begin_mask - 1, end_mask - begin_mask);
+//}
 
-double GetValueUCAC2_d(const std::string& str, UCAC2Label label) {
-	return atof(GetValueUCAC2_s(str, label).c_str());
-}
+//double GetValueUCAC2_d(const std::string& str, UCAC2Label label) {
+//	return atof(GetValueUCAC2_s(str, label).c_str());
+//}
 
 //'d' - double
 //'c' - char
