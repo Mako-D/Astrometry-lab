@@ -26,10 +26,10 @@ private:
 	template<typename T>
 	T round_angle(const T& angle) {
 		if (type == AngleType::fullcos) {
-			if (angle < 0) {
-				return angle + 360;
-			}
-			else if (angle > 360) {
+			//if (angle < 0) {
+			//	return angle + 360;
+			//}
+			if (angle > 360 || angle < 0) {
 				return fmod(angle, 360);
 			}
 			else {

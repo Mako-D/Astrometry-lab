@@ -361,3 +361,8 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
+/Astrometry-lab/UCAC2Catalog
+/Astrometry-lab/UCAC2Catalog
+/Astrometry-lab/UCAC2Catalog
+/Astrometry-lab/test
+/Astrometry-lab/catalog.dat

@@ -1,5 +1,3 @@
-#pragma once
-
 #include <iostream>
 #include <cmath>
 
@@ -13,10 +11,11 @@ using namespace std;
 * учитывается введённый тип
 */
 
-#define AngleSecond double(1. / (60 * 60)); //Секунда угловой дуги
+#define AngleSecond 1. / (60. * 60.); //Секунда угловой дуги
 #define AngleMinute double(1. / 60); //Минута угловой дуги
 #define AngleMAS double(1./(60 * 60 * 100)) //Милисекунда угловой дуги
 #define AngleAccuracy AngleSecond // Точность угла
+#define MagnitudeAccuracy 1.
 
 enum AngleType {
 	fullcos,
@@ -65,10 +64,10 @@ public:
 		this->deg = round_angle(deg);
 	}
 
-	double GetDeg() {
+	double GetDeg() const {
 		return deg;
 	}
-	AngleType GetType() {
+	AngleType GetType() const {
 		return type;
 	}
 	friend Angle operator+ (const Angle& lhs, const Angle& rhs) {
@@ -104,12 +103,20 @@ public:
 	}
 	friend bool operator == (const Coordinates& lhs, const Coordinates& rhs) {
 		return (lhs.alpha == rhs.alpha) &&
-			(lhs.delta == rhs.delta);
+			   (lhs.delta == rhs.delta);
 	}
 	void MoveStar(double speed_in_mas_alpha, double speed_in_mas_delta, double time_in_year) {
 		alpha = alpha + speed_in_mas_alpha * AngleMAS * time_in_year;
 		delta = delta + speed_in_mas_delta * AngleMAS * time_in_year;
 	}
+	double Get_alpha() const{
+		return alpha.GetDeg();
+	}
+	double Get_delta() const {
+		return delta.GetDeg();
+	}
+
+
 };
 
 //int main() {

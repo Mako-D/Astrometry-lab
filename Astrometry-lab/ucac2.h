@@ -32,7 +32,7 @@ UCAC2_STAR
 /* Note: sizeof( UCAC2_STAR) = 44 bytes */
 
 void flip_ucac2_star( UCAC2_STAR *star);
-int extract_ucac2_stars( FILE *ofile, const double ra, const double dec,
+int extract_ucac2_stars( /*FILE *ofile*/const char* buf, const double ra, const double dec,
                   const double width, const double height, const char *path,
                   const int is_supplement);
 int extract_ucac2_info( const long ucac2_number, UCAC2_STAR *star,

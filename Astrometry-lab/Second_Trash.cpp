@@ -15,6 +15,7 @@ using namespace std;
 #define AngleMinute double(1. / 60); //Минута угловой дуги
 #define AngleMAS double(1./(60 * 60 * 100)) //Милисекунда угловой дуги
 #define AngleAccuracy AngleSecond // Точность угла
+#define MagnitudeAccuracy 1.;
 
 enum AngleType {
 	fullcos,

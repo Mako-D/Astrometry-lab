@@ -150,6 +150,7 @@
     <ClCompile Include="ucac2.c" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Third_Trash.h" />
     <ClInclude Include="Second_Trash.h" />
     <ClInclude Include="ucac2.h" />
   </ItemGroup>

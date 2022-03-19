@@ -1,3 +1,4 @@
+#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
 #include <string.h>
 #include <stdint.h>
@@ -216,7 +217,6 @@ int write_ucac2_star( const long offset, char *obuff,
 #error "Unknown platform; please report so it can be fixed!"
 #endif
 
-
 static FILE *get_ucac2_zone_file( const int zone_number,
               const int is_supplement, const char *path)
 {
@@ -272,7 +272,7 @@ int extract_ucac2_info( const long ucac2_number, UCAC2_STAR *star,
    return( rval);
 }
 
-int extract_ucac2_stars( FILE *ofile, const double ra, const double dec,
+int extract_ucac2_stars(/*FILE* ofile,*/ const char* buf, const double ra, const double dec,
                   const double width, const double height, const char *path,
                   const int is_supplement)
 {
@@ -363,7 +363,8 @@ int extract_ucac2_stars( FILE *ofile, const double ra, const double dec,
 
                write_ucac2_star( offset + 1L + (is_supplement ? BSS_OFFSET : 0),
                                        buff, &star);
-               fwrite( buff, 1, strlen( buff), ofile);
+               strcat(buf, buff);
+               // fwrite( buff, 1, strlen( buff), ofile);
                rval++;
                }
             offset++;
@@ -380,10 +381,10 @@ int extract_ucac2_stars( FILE *ofile, const double ra, const double dec,
    if( rval >= 0 && ra > 0. && ra < 360.)
       {
       if( ra1 < 0.)      /* left side crosses over RA=0h */
-         rval += extract_ucac2_stars( ofile, ra+360., dec, width, height,
+         rval += extract_ucac2_stars( /*ofile,*/buf, ra+360., dec, width, height,
                                                       path, is_supplement);
       if( ra2 > 360.)    /* right side crosses over RA=24h */
-         rval += extract_ucac2_stars( ofile, ra-360., dec, width, height,
+         rval += extract_ucac2_stars( /*ofile,*/buf, ra-360., dec, width, height,
                                                       path, is_supplement);
       }
    return( rval);
