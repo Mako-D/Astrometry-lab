@@ -19,7 +19,7 @@ using RA = double;
 using CoordinatesEpoch = pair<RA, DE>;
 using ProperMotion = pair<RA, DE>; // degree per year
 
-enum SpectralClass {
+enum class SpectralClass {
 	O,
 	B,
 	A,
@@ -124,7 +124,40 @@ public:
 			  GetValueTycho2_d(istring, Tycho2Label::pmDE) },
 			  GetValueTycho2_d(istring, Tycho2Label::VT) 
 		};
+		ts.sp = ts.Set_SpectralClass(GetValueTycho2_d(istring, Tycho2Label::BT), 
+			GetValueTycho2_d(istring, Tycho2Label::VT));
 		return is;
+	}
+	SpectralClass Get_sp() const {
+		return sp;
+	}
+private:
+	SpectralClass sp;
+	SpectralClass Set_SpectralClass(double B, double V) {
+		// https://ads.harvard.edu/cgi-bin/bbrowse?book=hsaa&page=65
+		SpectralClass sp;
+		if (B - V > 1.40) {
+			sp = SpectralClass::M;
+		}
+		else if (B - V > 0.81) {
+			sp = SpectralClass::K;
+		}
+		else if (B - V > 0.58) {
+			sp = SpectralClass::G;
+		}
+		else if (B - V > 0.30) {
+			sp = SpectralClass::F;
+		}
+		else if (B - V > -0.02) {
+			sp = SpectralClass::A;
+		}
+		else if (B - V > -0.30) {
+			sp = SpectralClass::B;
+		}
+		else {
+			sp = SpectralClass::O;
+		}
+		return sp;
 	}
 };
 
@@ -149,10 +182,10 @@ pair<T, K> operator /(const pair<T, K>& lhs, double rhs) {
 }
 
 using Tycho2Catalog = vector<TYCHO2STAR>;
-using IndentityCatalog = vector<pair<TYCHO2STAR, UCAC2STAR>>;
+using IdentityCatalog = vector<pair<TYCHO2STAR, UCAC2STAR>>;
 
 
-double CalcUncertaintyOfCatalogs(const IndentityCatalog& cat) {
+double CalcUncertaintyOfCatalogs(const IdentityCatalog& cat) {
 	// #1.1 (1) stage
 	vector<pair<double, double>> coord_uncert_1;
 	{
@@ -246,8 +279,10 @@ double CalcUncertaintyOfCatalogs(const IndentityCatalog& cat) {
 		}
 
 		map<int, pair<double, double>> Delta_coord_mag;
-		for (const auto& [zone, coord] : zone_delim_mag) {
-			Delta_coord_mag[zone] = Delta_coord_mag[zone] + coord[zone];
+		for (const auto& [zone, star] : zone_delim_mag) {
+			for (const auto& coord : star) {
+				Delta_coord_mag[zone] = Delta_coord_mag[zone] + coord;
+			}
 		}
 		for (auto& [zone, coord] : Delta_coord_mag) {
 			coord = coord / int(zone_delim_mag[zone].size());
@@ -261,25 +296,67 @@ double CalcUncertaintyOfCatalogs(const IndentityCatalog& cat) {
 		}
 	}
 
-	return 1.;
+	vector<pair<double, double>> coord_uncert_5;
+	{
+		// 5.1 (9) stage
+		//extract spectral classes list
+		vector<SpectralClass> sp_u2_list;
+		for (const auto& [t2s, u2s] : cat) {
+			sp_u2_list.push_back(t2s.Get_sp());
+		}
+
+		map<SpectralClass, vector<pair<double, double>>> zone_delim_sp;
+		for (size_t i = 0; i < coord_uncert_4.size(); i++) {
+			zone_delim_sp[sp_u2_list[i]].push_back(coord_uncert_4[i]);
+		}
+
+		map<SpectralClass, pair<double, double>> Delta_coord_sp;
+		for (const auto& [zone, star] : zone_delim_sp) {
+			for (const auto& coord : star) {
+				Delta_coord_sp[zone] = Delta_coord_sp[zone] + coord;
+			}
+		}
+		for (auto& [zone, coord] : Delta_coord_sp) {
+			coord = coord / int(zone_delim_sp[zone].size());
+		}
+
+		//5.2 (10) stage
+		for (size_t i = 0; i < coord_uncert_4.size(); i++) {
+			coord_uncert_5.push_back(
+				coord_uncert_4[i] - Delta_coord_sp[sp_u2_list[i]]
+			);
+		}
+	}
+
+	//6.1 (11) stage
+	double RA_res = 0., DE_res = 0.;
+	for (const auto& [RA, DE] : coord_uncert_5) {
+		RA_res += RA;
+		DE_res += DE;
+	}
+
+	RA_res /= static_cast<int>(coord_uncert_5.size());
+	DE_res /= static_cast<int>(coord_uncert_5.size());
+
+	return sqrt(RA_res * RA_res + DE_res * DE_res);
 }
 
 int main() {
-	IndentityCatalog ICatalog;
+	IdentityCatalog ICatalog;
 	{
 		Tycho2Catalog t2c;
 		{
 			ifstream t2c_stream("catalog.dat");
 			if (t2c_stream.fail()) exit(1);
 			TYCHO2STAR temp;
-			while (!t2c_stream.eof() && t2c.size() < 300'000) {
+			while (!t2c_stream.eof() /*&& t2c.size() < 100'000*/) {
 				t2c_stream >> temp;
 				t2c.push_back(temp);
 			}
 			t2c_stream.close();
 		}
 
-		//auto start_time = std::chrono::steady_clock::now();
+		auto start_time1 = std::chrono::steady_clock::now();
 		{
 			for (const auto& t2s : t2c) {
 				char buffer[4000] = { '\0' };
@@ -304,11 +381,18 @@ int main() {
 				}
 			}
 		}
-		//auto end_time = std::chrono::steady_clock::now();
-		//auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-		//std::cout << elapsed_ns.count() << " ms\n";
+		auto end_time1 = std::chrono::steady_clock::now();
+		auto elapsed_ns1 = std::chrono::duration_cast<std::chrono::milliseconds>(end_time1 - start_time1);
+		std::cout << "Indentification time is: " << elapsed_ns1.count() << " ms\n";
 	}
-	double fuck = CalcUncertaintyOfCatalogs(ICatalog);
 
+	auto start_time = std::chrono::steady_clock::now();
+
+	cout << "Total value of identical stars: " << ICatalog.size() << endl;
+	cout << "Gamma value is: " << CalcUncertaintyOfCatalogs(ICatalog) << endl;
+
+	auto end_time = std::chrono::steady_clock::now();
+	auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+	std::cout << "Time of calc:" << elapsed_ns.count() << " ms\n";
 	return 0;
 }
