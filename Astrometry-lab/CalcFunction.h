@@ -59,22 +59,19 @@ double CalcUncertaintyOfCatalogs(const IdentityCatalog& cat) {
 		map<int, pair<double, double>> Delta_coord_RA;
 		for (const auto& [zone, star] : zone_delim_RA_2) {
 			for (const auto& coord : star) {
-				Delta_coord_RA[zone].first += coord.first;
-				Delta_coord_RA[zone].second += coord.second;
+				Delta_coord_RA[zone] = Delta_coord_RA[zone] + coord;
 			}
 		}
 		//Делю на число звёзд в зоне
 		for (auto& [zone, coord] : Delta_coord_RA) {
-			coord.first /= static_cast<int>(zone_delim_RA_2[zone].size());
-			coord.second /= static_cast<int>(zone_delim_RA_2[zone].size());
+			coord = coord / static_cast<int>(zone_delim_RA_2[zone].size());
 		}
 
 		// 2.2 (4) stage
 		for (const auto& a_1 : coord_uncert_1) {
-			coord_uncert_2.push_back({
-				a_1.first - Delta_coord_RA[int(a_1.first)].first,
-				a_1.second - Delta_coord_RA[int(a_1.first)].second
-				});
+			coord_uncert_2.push_back(
+				a_1 - Delta_coord_RA[int(a_1.first)]
+				);
 		}
 	}
 
@@ -93,16 +90,14 @@ double CalcUncertaintyOfCatalogs(const IdentityCatalog& cat) {
 			}
 		}
 		for (auto& [zone, coord] : Delta_coord_DE) {
-			coord.first /= static_cast<int>(zone_delim_DE_2[zone].size());
-			coord.second /= static_cast<int>(zone_delim_DE_2[zone].size());
+			coord = coord / static_cast<int>(zone_delim_DE_2[zone].size());
 		}
 
 		// 3.2 (6) stage
 		for (const auto& a_2 : coord_uncert_2) {
-			coord_uncert_3.push_back({
-				a_2.first - Delta_coord_DE[int(a_2.second)].first,
-				a_2.second - Delta_coord_DE[int(a_2.second)].second
-				});
+			coord_uncert_3.push_back(
+				a_2 - Delta_coord_DE[int(a_2.second)]
+				);
 		}
 	}
 
