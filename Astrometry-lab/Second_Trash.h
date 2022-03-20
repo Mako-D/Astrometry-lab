@@ -12,8 +12,8 @@ using namespace std;
 */
 
 #define AngleSecond 1. / (60. * 60.); //Секунда угловой дуги
-#define AngleMinute double(1. / 60); //Минута угловой дуги
-#define AngleMAS double(1./(60 * 60 * 100)) //Милисекунда угловой дуги
+#define AngleMinute double(1. / 60.); //Минута угловой дуги
+#define AngleMAS double(1./(60. * 60. * 100.)) //Милисекунда угловой дуги
 #define AngleAccuracy AngleSecond // Точность угла
 #define MagnitudeAccuracy 1.
 
