@@ -147,8 +147,10 @@
     <ClCompile Include="ucac2.c" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Third_Trash.h" />
-    <ClInclude Include="Second_Trash.h" />
+    <ClInclude Include="CalcFunction.h" />
+    <ClInclude Include="CatalogClasses.h" />
+    <ClInclude Include="Tycho2access.h" />
+    <ClInclude Include="Coordinate.h" />
     <ClInclude Include="ucac2.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

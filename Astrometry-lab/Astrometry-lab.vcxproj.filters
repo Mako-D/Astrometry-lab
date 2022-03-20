@@ -23,13 +23,19 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Second_Trash.h">
+    <ClInclude Include="Coordinate.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="Third_Trash.h">
+    <ClInclude Include="Tycho2access.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
     <ClInclude Include="ucac2.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="CatalogClasses.h">
+      <Filter>Файлы заголовков</Filter>
+    </ClInclude>
+    <ClInclude Include="CalcFunction.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
   </ItemGroup>
