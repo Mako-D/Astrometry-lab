@@ -66,5 +66,6 @@ int main() {
 	auto end_time = std::chrono::steady_clock::now();
 	auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
 	std::cout << "Time of calc:" << elapsed_ns.count() << " ms\n";
+	system("pause");
 	return 0;
 }

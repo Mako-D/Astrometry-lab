@@ -3,8 +3,6 @@
 #include <utility>
 #include <string>
 #include <vector>
-#include <chrono>
-#include <iostream>
 
 enum class Tycho2Label {
 	TYC1,
