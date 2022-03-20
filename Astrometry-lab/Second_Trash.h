@@ -22,6 +22,7 @@ enum AngleType {
 	halfsin
 };
 
+
 class Angle {
 private:
 	double deg;
