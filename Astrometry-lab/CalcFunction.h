@@ -4,12 +4,12 @@
 #include <map>
 
 template<typename T, typename K>
-std::pair<T, K> operator +(const std::pair<T, K>& lhs, const std::pair<T, K>& rhs) {
+std::pair<T, K> operator +=(const std::pair<T, K>& lhs, const std::pair<T, K>& rhs) {
 	return { lhs.first + rhs.first, lhs.second + rhs.second };
 }
 
 template<typename T, typename K>
-std::pair<T, K> operator /(const std::pair<T, K>& lhs, const std::pair<T, K>& rhs) {
+std::pair<T, K> operator /=(const std::pair<T, K>& lhs, const std::pair<T, K>& rhs) {
 	return { lhs.first / rhs.first, lhs.second / rhs.second };
 }
 
@@ -19,7 +19,7 @@ std::pair<T, K> operator -(const std::pair<T, K>& lhs, const std::pair<T, K>& rh
 }
 
 template<typename T, typename K>
-std::pair<T, K> operator /(const std::pair<T, K>& lhs, double rhs) {
+std::pair<T, K> operator /=(const std::pair<T, K>& lhs, double rhs) {
 	return { lhs.first / rhs, lhs.second / rhs };
 }
 
@@ -32,18 +32,17 @@ double CalcUncertaintyOfCatalogs(const IdentityCatalog& cat) {
 	// #1.1 (1) stage
 	vector<pair<double, double>> coord_uncert_1;
 	{
+		pair<double, double> Delta_coord = { 0., 0. };
 		double Delta_RA = 0.;
 		double Delta_DE = 0.;
 		for (const auto& [t2s, u2s] : cat) {
-			Delta_RA += u2s.Get_RA() - t2s.Get_RA();
-			Delta_DE += u2s.Get_DE() - t2s.Get_DE();
+			Delta_coord += make_pair(u2s.Get_RA() - t2s.Get_RA(), u2s.Get_DE() - t2s.Get_DE());
 		}
-		Delta_RA /= static_cast<int>(cat.size());
-		Delta_DE /= static_cast<int>(cat.size());
+		Delta_coord /= static_cast<int>(cat.size());
 
 		// #1.2 (2) stage
 		for (const auto& [t2s, u2s] : cat) {
-			coord_uncert_1.push_back({ u2s.Get_RA() - Delta_RA, u2s.Get_DE() - Delta_DE });
+			coord_uncert_1.push_back(make_pair(u2s.Get_RA(), u2s.Get_DE()) - Delta_coord);
 		}
 	}
 
@@ -60,12 +59,12 @@ double CalcUncertaintyOfCatalogs(const IdentityCatalog& cat) {
 		map<int, pair<double, double>> Delta_coord_RA;
 		for (const auto& [zone, star] : zone_delim_RA_2) {
 			for (const auto& coord : star) {
-				Delta_coord_RA[zone] = Delta_coord_RA[zone] + coord;
+				Delta_coord_RA[zone] += coord;
 			}
 		}
 		//Делю на число звёзд в зоне
 		for (auto& [zone, coord] : Delta_coord_RA) {
-			coord = coord / static_cast<int>(zone_delim_RA_2[zone].size());
+			coord /= static_cast<int>(zone_delim_RA_2[zone].size());
 		}
 
 		// 2.2 (4) stage
@@ -87,11 +86,11 @@ double CalcUncertaintyOfCatalogs(const IdentityCatalog& cat) {
 		map<int, pair<double, double>> Delta_coord_DE;
 		for (const auto& [zone, star] : zone_delim_DE_2) {
 			for (const auto& coord : star) {
-				Delta_coord_DE[zone] = Delta_coord_DE[zone] + coord;
+				Delta_coord_DE[zone] += coord;
 			}
 		}
 		for (auto& [zone, coord] : Delta_coord_DE) {
-			coord = coord / static_cast<int>(zone_delim_DE_2[zone].size());
+			coord /= static_cast<int>(zone_delim_DE_2[zone].size());
 		}
 
 		// 3.2 (6) stage
@@ -119,11 +118,11 @@ double CalcUncertaintyOfCatalogs(const IdentityCatalog& cat) {
 		map<int, pair<double, double>> Delta_coord_mag;
 		for (const auto& [zone, star] : zone_delim_mag) {
 			for (const auto& coord : star) {
-				Delta_coord_mag[zone] = Delta_coord_mag[zone] + coord;
+				Delta_coord_mag[zone] += coord;
 			}
 		}
 		for (auto& [zone, coord] : Delta_coord_mag) {
-			coord = coord / int(zone_delim_mag[zone].size());
+			coord /= int(zone_delim_mag[zone].size());
 		}
 
 		// 4.2 (8) stage
@@ -151,11 +150,11 @@ double CalcUncertaintyOfCatalogs(const IdentityCatalog& cat) {
 		map<SpectralClass, pair<double, double>> Delta_coord_sp;
 		for (const auto& [zone, star] : zone_delim_sp) {
 			for (const auto& coord : star) {
-				Delta_coord_sp[zone] = Delta_coord_sp[zone] + coord;
+				Delta_coord_sp[zone] += coord;
 			}
 		}
 		for (auto& [zone, coord] : Delta_coord_sp) {
-			coord = coord / int(zone_delim_sp[zone].size());
+			coord /= int(zone_delim_sp[zone].size());
 		}
 
 		//5.2 (10) stage
