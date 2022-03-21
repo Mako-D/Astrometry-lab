@@ -6,8 +6,8 @@
 using Magnitude = double;
 using DE = double;
 using RA = double;
-using CoordinatesEpoch = pair<RA, DE>;
-using ProperMotion = pair<RA, DE>; // degree per year
+using CoordinatesEpoch = std::pair<RA, DE>;
+using ProperMotion = std::pair<RA, DE>; // degree per year
 
 enum class SpectralClass {
 	O,
@@ -69,7 +69,9 @@ private:
 	//int UCAC2ID;
 	//UCAC2_STAR s;
 
-	friend istream& operator >> (istream& is, UCAC2STAR& in) {
+	friend std::istream& operator >> (std::istream& is, UCAC2STAR& in) {
+
+		using namespace std;
 		string temp;
 		string needed1, needed2;
 		is >> temp >> needed1 >> needed2;
@@ -104,9 +106,9 @@ public:
 		this->pmotion = { 0., 0. };
 		this->mag = 0.;
 	}
-	friend istream& operator >>(istream& is, TYCHO2STAR& ts) {
-		string istring;
-		getline(is, istring, '\n');
+	friend std::istream& operator >>(std::istream& is, TYCHO2STAR& ts) {
+		std::string istring;
+		std::getline(is, istring, '\n');
 		ts = {
 			{ GetValueTycho2_d(istring, Tycho2Label::mRAdeg),
 			  GetValueTycho2_d(istring, Tycho2Label::mDEdeg) },

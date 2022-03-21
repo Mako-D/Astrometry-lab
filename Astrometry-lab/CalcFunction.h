@@ -4,30 +4,31 @@
 #include <map>
 
 template<typename T, typename K>
-pair<T, K> operator +(const pair<T, K>& lhs, const pair<T, K>& rhs) {
+std::pair<T, K> operator +(const std::pair<T, K>& lhs, const std::pair<T, K>& rhs) {
 	return { lhs.first + rhs.first, lhs.second + rhs.second };
 }
 
 template<typename T, typename K>
-pair<T, K> operator /(const pair<T, K>& lhs, const pair<T, K>& rhs) {
+std::pair<T, K> operator /(const std::pair<T, K>& lhs, const std::pair<T, K>& rhs) {
 	return { lhs.first / rhs.first, lhs.second / rhs.second };
 }
 
 template<typename T, typename K>
-pair<T, K> operator -(const pair<T, K>& lhs, const pair<T, K>& rhs) {
+std::pair<T, K> operator -(const std::pair<T, K>& lhs, const std::pair<T, K>& rhs) {
 	return { lhs.first - rhs.first, lhs.second - rhs.second };
 }
 
 template<typename T, typename K>
-pair<T, K> operator /(const pair<T, K>& lhs, double rhs) {
+std::pair<T, K> operator /(const std::pair<T, K>& lhs, double rhs) {
 	return { lhs.first / rhs, lhs.second / rhs };
 }
 
-using Tycho2Catalog = vector<TYCHO2STAR>;
-using IdentityCatalog = vector<pair<TYCHO2STAR, UCAC2STAR>>;
+using Tycho2Catalog = std::vector<TYCHO2STAR>;
+using IdentityCatalog = std::vector<std::pair<TYCHO2STAR, UCAC2STAR>>;
 
 
 double CalcUncertaintyOfCatalogs(const IdentityCatalog& cat) {
+	using namespace std;
 	// #1.1 (1) stage
 	vector<pair<double, double>> coord_uncert_1;
 	{

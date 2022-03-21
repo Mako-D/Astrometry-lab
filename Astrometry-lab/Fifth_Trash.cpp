@@ -1,9 +1,7 @@
 #define _CRT_SECURE_NO_WARNINGS
-#include <stdint.h>
 #include <string>
 #include <fstream>
 #include <sstream>
-#include <omp.h>
 #include <chrono>
 
 extern "C" {
@@ -18,7 +16,7 @@ int main() {
 	{
 		Tycho2Catalog t2c;
 		{
-			ifstream t2c_stream("catalog.dat");
+			std::ifstream t2c_stream("catalog.dat");
 			if (t2c_stream.fail()) exit(1);
 			TYCHO2STAR temp;
 			while (!t2c_stream.eof() /*&& t2c.size() < 100'000*/) {
@@ -37,12 +35,12 @@ int main() {
 				int a = extract_ucac2_stars(buffer, t2s.Get_RA(), t2s.Get_DE(),
 					AreaAccuraccyDeg, AreaAccuraccyDeg, path, 0);
 
-				stringstream ss;
-				string starlineUCAC2;
+				std::stringstream ss;
+				std::string starlineUCAC2;
 				ss << buffer;
 
 				while (getline(ss, starlineUCAC2)) {
-					stringstream ss_additional;
+					std::stringstream ss_additional;
 					UCAC2STAR u2s;
 					ss_additional << starlineUCAC2;
 					ss_additional >> u2s;
@@ -60,8 +58,8 @@ int main() {
 
 	auto start_time = std::chrono::steady_clock::now();
 
-	cout << "Total value of identical stars: " << ICatalog.size() << endl;
-	cout << "Gamma value is: " << CalcUncertaintyOfCatalogs(ICatalog) << endl;
+	std::cout << "Total value of identical stars: " << ICatalog.size() << '\n';
+	std::cout << "Gamma value is: " << CalcUncertaintyOfCatalogs(ICatalog) << '\n';
 
 	auto end_time = std::chrono::steady_clock::now();
 	auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);

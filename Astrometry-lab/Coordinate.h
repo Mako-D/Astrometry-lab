@@ -1,7 +1,6 @@
 #include <iostream>
 #include <cmath>
 
-using namespace std;
 
 /* Область определения cos -> 0 - 360 градусов
 * Область определение sin -> -180 - 180 градусов
@@ -76,7 +75,7 @@ public:
 			return{ lhs.deg + rhs.deg , lhs.type };
 		}
 		else {
-			cout << "UNDIFINED BEHAVIOR IN OPERATOR+, class Angle";
+			std::cout << "UNDIFINED BEHAVIOR IN OPERATOR+, class Angle";
 			exit(1);
 		}
 	}
@@ -116,7 +115,7 @@ public:
 	double Get_delta() const {
 		return delta.GetDeg();
 	}
-	friend istream& operator << (istream& is, Coordinates& c) {
+	friend std::istream& operator << (std::istream& is, Coordinates& c) {
 		double a, d;
 		is >> a >> d;
 		c = { a, d };
