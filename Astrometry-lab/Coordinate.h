@@ -53,6 +53,7 @@ private:
 			}
 			break;
 		}
+		return angle;
 	}
 public:
 	Angle() {

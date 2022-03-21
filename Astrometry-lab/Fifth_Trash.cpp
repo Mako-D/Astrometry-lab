@@ -46,7 +46,7 @@ int main() {
 					ss_additional >> u2s;
 					if (t2s == u2s) {
 						ICatalog.push_back({ t2s, u2s });
-						break;
+						//break; //По какой-то причине break сильно замедляет программу, при этом на результат не влияет
 					}
 				}
 			}
