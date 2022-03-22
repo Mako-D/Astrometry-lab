@@ -1,4 +1,3 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -32,6 +31,7 @@ int main() {
 				char buffer[4000] = { '\0' };
 				char path[24] = "UCAC2Catalog\\u2\\extract";
 
+				// https://github.com/Bill-Gray/star_cats
 				int a = extract_ucac2_stars(buffer, t2s.Get_RA(), t2s.Get_DE(),
 					AreaAccuraccyDeg, AreaAccuraccyDeg, path, 0);
 
