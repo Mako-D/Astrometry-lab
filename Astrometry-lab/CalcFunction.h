@@ -176,5 +176,5 @@ double CalcUncertaintyOfCatalogs(const IdentityCatalog& cat) {
 	DE_res /= static_cast<int>(coord_uncert_5.size());
 
 	//6.2 (12) stage
-	return sqrt(RA_res * RA_res + DE_res * DE_res);
+	return sqrt(RA_res * RA_res + DE_res * DE_res) / AngleMAS;
 }
