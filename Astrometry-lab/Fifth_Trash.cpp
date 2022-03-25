@@ -61,7 +61,7 @@ int main() {
 	//auto start_time = std::chrono::steady_clock::now();
 
 	std::cout << "Total value of identical stars: " << ICatalog.size() << '\n';
-	std::cout << "Gamma value is: " << CalcUncertaintyOfCatalogs(ICatalog) << '\n';
+	std::cout << "Gamma value is: " << CalcUncertaintyOfCatalogs(ICatalog) << "MAS" << '\n';
 
 	//auto end_time = std::chrono::steady_clock::now();
 	//auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
