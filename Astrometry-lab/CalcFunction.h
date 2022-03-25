@@ -52,7 +52,10 @@ double CalcUncertaintyOfCatalogs(const IdentityCatalog& cat) {
 	// Разбиваю звёзды по зонам, разбиение по RA
 		map<int, vector<pair<double, double>>> zone_delim_RA_2;
 		for (const auto& [u2RAe, u2DEe] : coord_uncert_1) {
-			zone_delim_RA_2[int(u2RAe)].push_back({ u2RAe, u2DEe }); // from 0 to 359 zones (totally 360)
+			// We agreed to divide the celestial sphere into zones in one-degree increments. 
+			// I take an integer part of the number. 
+			// They always go in one-degree increments.
+			zone_delim_RA_2[int(u2RAe)].push_back({ u2RAe, u2DEe });
 		}
 
 		//Суммирую по Alpha_1_i
@@ -62,7 +65,7 @@ double CalcUncertaintyOfCatalogs(const IdentityCatalog& cat) {
 				Delta_coord_RA[zone] += coord;
 			}
 		}
-		//Делю на число звёзд в зоне
+		// Divided by the number of stars in the zone
 		for (auto& [zone, coord] : Delta_coord_RA) {
 			coord /= static_cast<int>(zone_delim_RA_2[zone].size());
 		}

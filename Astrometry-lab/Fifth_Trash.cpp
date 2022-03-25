@@ -25,13 +25,15 @@ int main() {
 			t2c_stream.close();
 		}
 
-		auto start_time1 = std::chrono::steady_clock::now();
+		//auto start_time1 = std::chrono::steady_clock::now();
 		{
 			for (const auto& t2s : t2c) {
 				char buffer[4000] = { '\0' };
 				char path[24] = "UCAC2Catalog\\u2\\extract";
 
 				// https://github.com/Bill-Gray/star_cats
+				//ucac2.c has been changed. 
+				//Instead of returning stars to a file, it returns to char[]
 				int a = extract_ucac2_stars(buffer, t2s.Get_RA(), t2s.Get_DE(),
 					AreaAccuraccyDeg, AreaAccuraccyDeg, path, 0);
 
@@ -51,19 +53,19 @@ int main() {
 				}
 			}
 		}
-		auto end_time1 = std::chrono::steady_clock::now();
-		auto elapsed_ns1 = std::chrono::duration_cast<std::chrono::milliseconds>(end_time1 - start_time1);
-		std::cout << "Indentification time is: " << elapsed_ns1.count() << " ms\n";
+		//auto end_time1 = std::chrono::steady_clock::now();
+		//auto elapsed_ns1 = std::chrono::duration_cast<std::chrono::milliseconds>(end_time1 - start_time1);
+		//std::cout << "Indentification time is: " << elapsed_ns1.count() << " ms\n";
 	}
 
-	auto start_time = std::chrono::steady_clock::now();
+	//auto start_time = std::chrono::steady_clock::now();
 
 	std::cout << "Total value of identical stars: " << ICatalog.size() << '\n';
 	std::cout << "Gamma value is: " << CalcUncertaintyOfCatalogs(ICatalog) << '\n';
 
-	auto end_time = std::chrono::steady_clock::now();
-	auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
-	std::cout << "Time of calc:" << elapsed_ns.count() << " ms\n";
+	//auto end_time = std::chrono::steady_clock::now();
+	//auto elapsed_ns = std::chrono::duration_cast<std::chrono::milliseconds>(end_time - start_time);
+	//std::cout << "Time of calc:" << elapsed_ns.count() << " ms\n";
 	system("pause");
 	return 0;
 }

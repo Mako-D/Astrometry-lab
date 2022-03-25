@@ -116,7 +116,8 @@ public:
 			  GetValueTycho2_d(istring, Tycho2Label::pmDE) },
 			  GetValueTycho2_d(istring, Tycho2Label::VT)
 		};
-		ts.sp = ts.Set_SpectralClass(GetValueTycho2_d(istring, Tycho2Label::BT),
+		ts.sp = ts.Set_SpectralClass(
+			GetValueTycho2_d(istring, Tycho2Label::BT),
 			GetValueTycho2_d(istring, Tycho2Label::VT));
 		return is;
 	}

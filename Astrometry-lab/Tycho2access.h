@@ -42,32 +42,32 @@ enum class Tycho2Label {
 	corr
 };
 
-enum class UCAC2Label {
-	USAS2ID,
-	RA,
-	DE,
-	U2Rmag,
-	e_RAm,
-	e_DEm,
-	nobs,
-	e_pos,
-	ncat,
-	cflg,
-	EpRAm,
-	EpDEm,
-	pmRA,
-	pmDE,
-	e_pmRA,
-	e_pmDE,
-	q_pmRA,
-	q_pmDE,
-	m2_id,
-	m2_J,
-	m2_H,
-	m2_Ks,
-	m2_ph,
-	m2_cc
-};
+//enum class UCAC2Label {
+//	USAS2ID,
+//	RA,
+//	DE,
+//	U2Rmag,
+//	e_RAm,
+//	e_DEm,
+//	nobs,
+//	e_pos,
+//	ncat,
+//	cflg,
+//	EpRAm,
+//	EpDEm,
+//	pmRA,
+//	pmDE,
+//	e_pmRA,
+//	e_pmDE,
+//	q_pmRA,
+//	q_pmDE,
+//	m2_id,
+//	m2_J,
+//	m2_H,
+//	m2_Ks,
+//	m2_ph,
+//	m2_cc
+//};
 
 //std::string GetValueUCAC2_s(const std::string& str, UCAC2Label label) {
 //	using namespace std;
